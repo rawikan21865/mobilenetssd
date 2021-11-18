@@ -157,25 +157,31 @@ def event_handle(event):
             replyObj = TextSendMessage(text="ที่ไหนน??")
         elif (msg == "ที่กระท่อม ในหุบเขา") :
             replyObj = TextSendMessage(text="เอิ่ม...")
+            line_bot_api.reply_message(rtoken, replyObj)
         else :
-            replyObj = TextSendMessage(text=msg)
-        line_bot_api.reply_message(rtoken, replyObj)
+            herders = request.headers
+            json_headers = json.dump({k:v for k, v in headers.items()})
+            '''
+            json_line = request.get_json(force=False,cache=Flse)
+            json_line = json.dumps(json_line)
+            decoded = json.loadss(json_line)
+            crl= pycurl.Curl()
+            crl.setopt( crl.URL, "https://bots.dialogflow.com/linek--jomf/wehook")
+            crl.setopt( crl.POST, 1)
+            crl.setopt( crl.BINARYTRANSFER,true)
+            crl.setopt( crl.POSTFIELDS,decoded
+            crl.setopt( crl.HTTPHEADER,json_headers)
+            crl.setopt( crl.SSL_VERIFYHOST, 2)
+            crl.setopt( crl.SSL_VERIFYPEER, 1)
+            crl.setopt( crl.FOLLOWLOCATION, 1)
+            crl.setopt( crl.RETURNTRANSFER, 1)
+            crl.perform()
+            crl.close()
+            '''
+            replyObj = TextSendMessage(text=json_headers)
+            line_bot_api.reply_message(rtoken, replyobj)
+           
     elif msgType == "image":
-        try:
-            message_content = line_bot_api.get_message_content(event['message']['id'])
-            i = Image.open(BytesIO(message_content.content))
-            filename = event['message']['id'] + '.jpg'
-            i.save(UPLOAD_FOLDER + filename)
-            process_file(os.path.join(UPLOAD_FOLDER, filename), filename)
-
-            url = request.url_root + DOWNLOAD_FOLDER + filename
-            
-            line_bot_api.reply_message(
-                rtoken, [
-                    TextSendMessage(text='Object detection result:'),
-                    ImageSendMessage(url,url)
-                ])    
-    
         except:
             message = TextSendMessage(text="เกิดข้อผิดพลาด กรุณาส่งใหม่อีกครั้ง")
             line_bot_api.reply_message(event.reply_token, message)
