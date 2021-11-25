@@ -172,8 +172,13 @@ def event_handle(event,json_line):
             i.save(UPLOAD_FOLDER + filename)
             process_file(os.path.join(UPLOAD_FOLDER,filename),filename)
 
+            url = request.url_root + DOWNLOAD_FOLDER + filename
 
-
+            line_bot_api.reply_message(
+                rtoken, [
+                    TextSendMessge(text='Object detection result:'),
+                    ImageSendMessage(url,url)
+                ])
 
         except:
             message = TextSendMessage(text="เกิดข้อผิดพลาด กรุณาส่งใหม่อีกครั้ง")
