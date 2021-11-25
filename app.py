@@ -1,7 +1,7 @@
 import os
 from flask import Flask, request, redirect, url_for, render_template, send_from_directory, flash, jsonify
 from werkzeug.utils import secure_filename
-import cv2
+#import cv2
 import numpy as np
 import json
 import requests
@@ -164,8 +164,17 @@ def event_handle(event,json_line):
             json_headers.update({'Host':'bots.dialogflow.com'})
             url = "https://dialogflow.cloud.google.com/v1/integrations/line/webhook/41fb831d-2e19-415b-b19b-3176843dc65d"
             requests.post(url,data=json_line, headers=json_headers)
+     elif msgType == "image":
+         try:
+            message_content = line_bot_api.get_message_content(event['message']['id']:
+            i = Image.open(BytesIO(message_content.content))
+            filename = event['message']['id'] +'.jpg'
+            i.save(UPLOAD_FOLDER + filename)
+            process_file(os.path.join(UPLOAD_FOLDER,filename),filename)
 
-           
+
+
+
         except:
             message = TextSendMessage(text="เกิดข้อผิดพลาด กรุณาส่งใหม่อีกครั้ง")
             line_bot_api.reply_message(event.reply_token, message)
